@@ -7,17 +7,6 @@ use Illuminate\Http\Request;
 
 class YoutubeController extends Controller
 {
-    /**
-     * Show the application dashboard.
-     *
-     * @param Youtube $youtube
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index(Youtube $youtube)
-    {
-        return view('home');
-    }
-
     public function log(Youtube $youtube)
     {
         return $youtube->logIn();

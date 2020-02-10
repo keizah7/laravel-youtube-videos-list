@@ -50,6 +50,17 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
+                                <a class="nav-link" href="{{ route('home') }}" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="{{ route('video.index') }}" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Videos
+                                </a>
+                            </li>
+
+                            <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>

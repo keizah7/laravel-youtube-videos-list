@@ -10,12 +10,14 @@ class VideoController extends Controller
     /**
      * Show the application dashboard.
      *
+     * @param Youtube $youtube
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(Youtube $youtube)
+    public function index(Youtube $youtube, Request $request)
     {
-        if($youtube->isLogged()) {
-            return view('home');
-        }
+        return view('youtube.index', [
+            'chanells' => $youtube->getChannels(),
+            'videos' => $youtube->getVideos(),
+        ]);
     }
 }

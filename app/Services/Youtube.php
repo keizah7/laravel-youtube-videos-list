@@ -5,7 +5,7 @@ namespace App\Services;
 
 class Youtube
 {
-    private $oauthClientId, $oauthClientSecret, $youtubeApiKey;
+    private $oauthClientId, $oauthClientSecret, $youtubeApiKey, $client;
 
     /**
      * Youtube constructor.
@@ -19,12 +19,7 @@ class Youtube
         $this->oauthClientSecret = $oauthClientSecret;
         $this->youtubeApiKey = $youtubeApiKey;
 
-        $this->client = new \Google_Client();
-        $this->client->setClientId($this->oauthClientId);
-        $this->client->setClientSecret($this->oauthClientSecret);
-        $this->client->setScopes('https://www.googleapis.com/auth/youtube');
-        $this->client->setRedirectUri(route('youtube_callback'));
-        $this->tokenKey = 'token-'.$this->client->prepareScopes();
+        $this->init();
     }
 
     public function logIn()
@@ -44,7 +39,7 @@ class Youtube
         $this->client->authenticate($authCode);
         session([$this->tokenKey => $this->client->getAccessToken()]);
 
-        return redirect()->route('home');
+        return redirect()->route('video.index');
     }
 
     public function isLogged()
@@ -56,5 +51,42 @@ class Youtube
         }
 
         return $this->client->getAccessToken();
+    }
+
+    private function init(): void
+    {
+        $this->client = new \Google_Client();
+        $this->client->setClientId($this->oauthClientId);
+        $this->client->setClientSecret($this->oauthClientSecret);
+        $this->client->setScopes('https://www.googleapis.com/auth/youtube');
+        $this->client->setRedirectUri(route('youtube.callback'));
+        $this->tokenKey = 'token-' . $this->client->prepareScopes();
+    }
+
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    public function getChannels()
+    {
+        if($this->isLogged()) {
+            try {
+                $yt = new \Google_Service_YouTube($this->getClient());
+
+                $channelsResponse = $yt->channels->listChannels('contentDetails', array(
+                    'mine' => 'true',
+                ));
+
+                return collect($channelsResponse['items'])->first()->contentDetails->relatedPlaylists;
+            } catch (\Google_Service_Exception | \Google_Exception $e) {
+                return null;
+            }
+        }
+    }
+
+    public function getVideos()
+    {
+        return null;
     }
 }

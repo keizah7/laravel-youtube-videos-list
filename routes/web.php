@@ -17,4 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'YoutubeController@index')->name('home');
+Route::get('youtube/log', 'YoutubeController@log')->name('youtube_login');
+Route::get('youtube/callback', 'YoutubeController@callback')->name('youtube_callback');
+Route::get('/videos', 'VideoController@index')->name('video.index');

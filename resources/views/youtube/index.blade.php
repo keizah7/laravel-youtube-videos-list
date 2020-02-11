@@ -29,7 +29,7 @@
                         </form>
                         <hr>
                         @if(isset($videos->items))
-                            @foreach($videos->items as $video)
+                            @forelse($videos->items as $video)
                                 <div class="media
                                     @if($loop->last) mb-3 @endif
                                 ">
@@ -47,7 +47,9 @@
                                     </div>
                                 </div>
                                 @if(!$loop->last)<hr>@endif
-                            @endforeach
+                            @empty
+                                Playlist is empty
+                            @endforelse
                         @else
                             Playlist is empty
                         @endif

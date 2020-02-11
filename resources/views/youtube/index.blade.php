@@ -36,6 +36,13 @@
                                         <h5 class="mt-0">{{ $video->snippet->title }}</h5>
                                         <p>{{ Str::words($video->snippet->description, 50) }} </p>
                                     </div>
+                                    <div>
+                                        <form action="{{ route('videos.store') }}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $video->snippet->resourceId->videoId }}">
+                                            <button class="btn btn-outline-success" type="submit">Save</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 @if(!$loop->last)<hr>@endif
                             @empty

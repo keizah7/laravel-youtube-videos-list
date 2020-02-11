@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Youtube;
 use App\Video;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,9 @@ class VideoController extends Controller
      */
     public function index()
     {
-        return view('video.index');
+        return view('video.index', [
+            'videos' => Video::all(),
+        ]);
     }
 
     /**
@@ -31,11 +34,20 @@ class VideoController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, Youtube $youtube)
     {
-        //
+        $video = $youtube->getVideo($request->id);
+
+        auth()->user()->videos()->create([
+            'url' => $video->id,
+            'title' => $video->snippet->title,
+            'description' => $video->snippet->description,
+            'photo' => $video->snippet->thumbnails->default->url,
+        ]);
+
+        return redirect()->back();
     }
 
     /**
@@ -75,11 +87,14 @@ class VideoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Video  $video
-     * @return \Illuminate\Http\Response
+     * @param \App\Video $video
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function destroy(Video $video)
     {
-        //
+        $video->delete();
+
+        return redirect()->back();
     }
 }

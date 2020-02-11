@@ -39,7 +39,7 @@ class Youtube
         $this->client->authenticate($authCode);
         session([$this->tokenKey => $this->client->getAccessToken()]);
 
-        return redirect()->route('video.index');
+        return redirect()->route('youtube.index');
     }
 
     public function isLogged()
@@ -110,6 +110,22 @@ class Youtube
             }
         }
 
+        return collect();
+    }
+
+    public function getVideo($id)
+    {
+        if($this->isLogged()) {
+            try {
+                $yt = new \Google_Service_YouTube($this->getClient());
+
+                return collect($yt->videos->listVideos('snippet', [
+                    'id' => $id,
+                ])->items)->first();
+            } catch (\Google_Service_Exception | \Google_Exception $e) {
+                return collect();
+            }
+        }
         return collect();
     }
 }

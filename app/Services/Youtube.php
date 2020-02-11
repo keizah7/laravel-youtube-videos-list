@@ -5,7 +5,7 @@ namespace App\Services;
 
 class Youtube
 {
-    private $oauthClientId, $oauthClientSecret, $youtubeApiKey, $client;
+    private $oauthClientId, $oauthClientSecret, $youtubeApiKey, $client, $pagesInfo;
 
     /**
      * Youtube constructor.
@@ -61,6 +61,7 @@ class Youtube
         $this->client->setScopes('https://www.googleapis.com/auth/youtube');
         $this->client->setRedirectUri(route('youtube.callback'));
         $this->tokenKey = 'token-' . $this->client->prepareScopes();
+        $this->channels = collect();
     }
 
     public function getClient()
@@ -93,20 +94,30 @@ class Youtube
         }
     }
 
-    public function getVideos($channelId)
+    public function getVideos($channelId, $page)
     {
         if($this->isLogged()) {
             try {
                 $yt = new \Google_Service_YouTube($this->getClient());
 
-                return $yt->playlistItems->listPlaylistItems('snippet', [
+                $videos = $yt->playlistItems->listPlaylistItems('snippet', [
                     'playlistId' => $channelId ?? $this->channels->first(),
-                    'maxResults' => 10,
-//                    'nextPageToken' => '',
+                    'maxResults' => 5,
+                    'pageToken' => $page,
+//                    'nextPageToken' => 'CAEQAA',
 //                    'prevPageToken' => '',
                 ]);
+
+                $this->pagesInfo = [
+                    'next' => $videos->nextPageToken,
+                    'prev' => $videos->prevPageToken,
+                    'total' => $videos->pageInfo->totalResults,
+                    'inPage' => $videos->pageInfo->resultsPerPage,
+                ];
+
+                return $videos;
             } catch (\Google_Service_Exception | \Google_Exception $e) {
-                return collect();
+                return null;
             }
         }
 
@@ -126,6 +137,16 @@ class Youtube
                 return collect();
             }
         }
+
         return collect();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPagesInfo()
+    {
+        return $this->pagesInfo ?? null;
+    }
+
 }

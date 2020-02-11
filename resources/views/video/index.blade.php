@@ -12,7 +12,9 @@
 
                 <div class="card-body">
                     @forelse($videos as $video)
-                        <div class="media">
+                        <div class="media
+                            @if($loop->last) mb-3 @endif
+                        ">
                             <img src="{{ $video->photo }}" class="mr-3" alt="...">
                             <div class="media-body">
                                 <h5 class="mt-0">{{ $video->title }}</h5>
@@ -30,6 +32,7 @@
                     @empty
                         Video list is empty
                     @endforelse
+                    {{ $videos->links() }}
                 </div>
             </div>
         </div>

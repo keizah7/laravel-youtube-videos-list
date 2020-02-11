@@ -18,10 +18,13 @@ class YoutubeController extends Controller
     {
         $currentChannel = $request->channel;
 
+//        dd($youtube->getVideos($currentChannel, ''));
+
         return view('youtube.index', [
             'channels' => $youtube->getChannels(),
-            'videos' => $youtube->getVideos($currentChannel),
+            'videos' => $youtube->getVideos($currentChannel, $request->page),
             'currentChannel' => $currentChannel,
+            'pages' => $youtube->getPagesInfo(),
         ]);
     }
 

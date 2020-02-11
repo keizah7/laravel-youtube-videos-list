@@ -28,9 +28,11 @@
                             </div>
                         </form>
                         <hr>
-                        @isset($videos->items)
-                            @forelse($videos->items as $video)
-                                <div class="media">
+                        @if(isset($videos->items))
+                            @foreach($videos->items as $video)
+                                <div class="media
+                                    @if($loop->last) mb-3 @endif
+                                ">
                                     <img src="{{ $video->snippet->thumbnails->default->url }}" class="mr-3" alt="...">
                                     <div class="media-body">
                                         <h5 class="mt-0">{{ $video->snippet->title }}</h5>
@@ -45,13 +47,20 @@
                                     </div>
                                 </div>
                                 @if(!$loop->last)<hr>@endif
-                            @empty
-                                Playlist is empty
-                            @endforelse
-                        @endisset
+                            @endforeach
+                        @else
+                            Playlist is empty
+                        @endif
                     @else
                         <a class="btn btn-primary" href="{{ route('youtube.login') }}">Log to google</a>
                     @endif
+
+{{--                    {{ dd($pages) }}--}}
+                    @include('layouts.pagination', [
+                        'channel' => $currentChannel,
+                        'pages' => $pages,
+                        'route' => 'youtube.index',
+                    ])
                 </div>
             </div>
         </div>

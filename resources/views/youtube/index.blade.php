@@ -5,7 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Videos</div>
+                <div  class="card-header d-flex justify-content-between align-items-center">
+                    Youtube videos
+                    <a class="btn btn-outline-primary" href="{{ route('videos.index') }}">Back</a>
+                </div>
 
                 <div class="card-body">
                     @if($channels)
@@ -19,7 +22,7 @@
                                     </select>
                                     <div class="">
                                         <button class="btn btn-outline-primary" type="submit">Show</button>
-                                        <a class="btn btn-outline-danger" href="{{ route('video.index') }}" type="submit">Clear</a>
+                                        <a class="btn btn-outline-danger" href="{{ route('videos.index') }}" type="submit">Clear</a>
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +43,7 @@
                             @endforelse
                         @endisset
                     @else
-                        <a class="btn btn-primary" href="{{ url('youtube/login') }}">Log to google</a>
+                        <a class="btn btn-primary" href="{{ route('youtube.login') }}">Log to google</a>
                     @endif
                 </div>
             </div>

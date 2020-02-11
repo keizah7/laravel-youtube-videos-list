@@ -55,7 +55,7 @@
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link" href="{{ route('video.index') }}" role="button" aria-haspopup="true" aria-expanded="false">
+                                <a class="nav-link" href="{{ route('videos.index') }}" role="button" aria-haspopup="true" aria-expanded="false">
                                     Videos
                                 </a>
                             </li>

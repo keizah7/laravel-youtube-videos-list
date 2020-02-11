@@ -17,7 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('youtube/login', 'YoutubeController@log')->name('youtube.login');
-Route::get('youtube/callback', 'YoutubeController@callback')->name('youtube.callback');
-Route::get('/videos', 'VideoController@index')->name('video.index');
+Route::group(['middleware' => 'auth'], function() {
+    Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::resource('videos', 'VideoController');
+
+    Route::get('youtube', 'YoutubeController@index')->name('youtube.index');
+    Route::get('youtube/login', 'YoutubeController@login')->name('youtube.login');
+    Route::get('youtube/callback', 'YoutubeController@callback')->name('youtube.callback');
+});
+
+

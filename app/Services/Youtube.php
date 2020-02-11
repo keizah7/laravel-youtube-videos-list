@@ -86,7 +86,7 @@ class Youtube
                     return [$item->snippet->title => $item->id];
                 });
 
-                return $playlists->merge($channels);
+                return $this->channels = $playlists->merge($channels);
             } catch (\Google_Service_Exception | \Google_Exception $e) {
                 return null;
             }
@@ -99,12 +99,12 @@ class Youtube
             try {
                 $yt = new \Google_Service_YouTube($this->getClient());
 
-                return dd($yt->playlistItems->listPlaylistItems('snippet', [
-                    'playlistId' => $channelId,
+                return $yt->playlistItems->listPlaylistItems('snippet', [
+                    'playlistId' => $channelId ?? $this->channels->first(),
                     'maxResults' => 10,
 //                    'nextPageToken' => '',
 //                    'prevPageToken' => '',
-                ]));
+                ]);
             } catch (\Google_Service_Exception | \Google_Exception $e) {
                 return collect();
             }

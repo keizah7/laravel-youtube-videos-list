@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Video::class);
     }
+
+    public function isLeader()
+    {
+        return $this->role_id > 1;
+    }
 }

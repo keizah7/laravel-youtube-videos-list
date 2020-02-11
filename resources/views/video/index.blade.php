@@ -7,7 +7,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     Videos
-                    <a class="btn btn-outline-primary" href="{{ route('youtube.index') }}">Add more</a>
+                    @if(auth()->user()->isLeader())
+                        <a class="btn btn-outline-primary" href="{{ route('youtube.index') }}">Add more</a>
+                    @endif
                 </div>
 
                 <div class="card-body">

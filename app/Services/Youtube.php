@@ -74,19 +74,42 @@ class Youtube
             try {
                 $yt = new \Google_Service_YouTube($this->getClient());
 
-                $channelsResponse = $yt->channels->listChannels('contentDetails', array(
-                    'mine' => 'true',
-                ));
+                $channelsResponse = $yt->channels->listChannels('snippet, contentDetails', ['mine' => true]);
+                $channels = collect($channelsResponse)->first()->contentDetails->relatedPlaylists;
 
-                return collect($channelsResponse['items'])->first()->contentDetails->relatedPlaylists;
+                $channels = collect($channels)->filter(function ($value) {
+                    return $value;
+                });
+
+                $playlists = $yt->playlists->listPlaylists('snippet', ['mine' => true])->items;
+                $playlists = collect($playlists)->mapWithKeys(function ($item) {
+                    return [$item->snippet->title => $item->id];
+                });
+
+                return $playlists->merge($channels);
             } catch (\Google_Service_Exception | \Google_Exception $e) {
                 return null;
             }
         }
     }
 
-    public function getVideos()
+    public function getVideos($channelId)
     {
-        return null;
+        if($this->isLogged()) {
+            try {
+                $yt = new \Google_Service_YouTube($this->getClient());
+
+                return dd($yt->playlistItems->listPlaylistItems('snippet', [
+                    'playlistId' => $channelId,
+                    'maxResults' => 10,
+//                    'nextPageToken' => '',
+//                    'prevPageToken' => '',
+                ]));
+            } catch (\Google_Service_Exception | \Google_Exception $e) {
+                return collect();
+            }
+        }
+
+        return collect();
     }
 }

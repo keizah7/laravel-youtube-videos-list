@@ -22,9 +22,11 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::resource('videos', 'VideoController');
 
-    Route::get('youtube', 'YoutubeController@index')->name('youtube.index');
-    Route::get('youtube/login', 'YoutubeController@login')->name('youtube.login');
-    Route::get('youtube/callback', 'YoutubeController@callback')->name('youtube.callback');
+    Route::group(['middleware' => 'isLeader'], function () {
+        Route::get('youtube', 'YoutubeController@index')->name('youtube.index');
+        Route::get('youtube/login', 'YoutubeController@login')->name('youtube.login');
+        Route::get('youtube/callback', 'YoutubeController@callback')->name('youtube.callback');
+    });
 });
 
 

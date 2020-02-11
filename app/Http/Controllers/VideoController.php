@@ -5,9 +5,18 @@ namespace App\Http\Controllers;
 use App\Services\Youtube;
 use App\Video;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class VideoController extends Controller
 {
+    /**
+     * VideoController constructor.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Video::class, 'video');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +25,7 @@ class VideoController extends Controller
     public function index()
     {
         return view('video.index', [
-            'videos' => Video::paginate(4),
+            'videos' => Video::orderByDesc('id')->paginate(10),
         ]);
     }
 
@@ -33,21 +42,30 @@ class VideoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     * @param Youtube $youtube
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, Youtube $youtube)
     {
         $video = $youtube->getVideo($request->id);
-
-        auth()->user()->videos()->create([
+        $data = [
             'url' => $video->id,
             'title' => $video->snippet->title,
             'description' => $video->snippet->description,
             'photo' => $video->snippet->thumbnails->default->url,
-        ]);
+        ];
 
-        return redirect()->back();
+        Validator::make($data, [
+            'url' => 'required|unique:videos,url',
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'photo' => 'required|max:255',
+        ])->validate();
+
+        auth()->user()->videos()->create($data);
+
+        return redirect()->back()->with('message', 'Video added successfully');
     }
 
     /**
@@ -95,6 +113,6 @@ class VideoController extends Controller
     {
         $video->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('message', 'Video deleted successfully');
     }
 }

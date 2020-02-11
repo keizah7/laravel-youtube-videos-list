@@ -11,13 +11,17 @@ class VideoController extends Controller
      * Show the application dashboard.
      *
      * @param Youtube $youtube
+     * @param Request $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Youtube $youtube, Request $request)
     {
+        $currentChannel = $request->channel;
+
         return view('youtube.index', [
-            'chanells' => $youtube->getChannels(),
-            'videos' => $youtube->getVideos(),
+            'channels' => $youtube->getChannels(),
+            'videos' => $youtube->getVideos($currentChannel),
+            'currentChannel' => $currentChannel,
         ]);
     }
 }

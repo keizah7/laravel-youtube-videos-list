@@ -7,15 +7,15 @@
         <nav class="pages-border" v-if="showPagination">
             <ul class="pagination">
                 <li class="page-item" :class="[{disabled: !pagination.prev}]">
-                    <a class="page-link" href="#" title="Previous page" @click="fetchVideos(pagination.prev)">&lsaquo;</a>
+                    <a class="page-link" href="" title="Previous page" @click.prevent="fetchVideos(pagination.prev)">&lsaquo;</a>
                 </li>
 
                 <li class="page-item disabled">
-                    <a class="page-link text-dark" href="#">Page {{ pagination.current }} of {{ pagination.last }}</a>
+                    <a class="page-link text-dark">Page {{ pagination.current }} of {{ pagination.last }}</a>
                 </li>
 
                 <li class="page-item" v-bind:class="[{disabled: !pagination.next}]">
-                    <a class="page-link" href="#" title="Next page" @click="fetchVideos(pagination.next)">&rsaquo;</a>
+                    <a class="page-link" href="" title="Next page" @click.prevent="fetchVideos(pagination.next)">&rsaquo;</a>
                 </li>
             </ul>
         </nav>

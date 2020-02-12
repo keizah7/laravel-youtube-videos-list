@@ -38209,9 +38209,10 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      attrs: { href: "#", title: "Previous page" },
+                      attrs: { href: "", title: "Previous page" },
                       on: {
                         click: function($event) {
+                          $event.preventDefault()
                           return _vm.fetchVideos(_vm.pagination.prev)
                         }
                       }
@@ -38222,18 +38223,14 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("li", { staticClass: "page-item disabled" }, [
-                _c(
-                  "a",
-                  { staticClass: "page-link text-dark", attrs: { href: "#" } },
-                  [
-                    _vm._v(
-                      "Page " +
-                        _vm._s(_vm.pagination.current) +
-                        " of " +
-                        _vm._s(_vm.pagination.last)
-                    )
-                  ]
-                )
+                _c("a", { staticClass: "page-link text-dark" }, [
+                  _vm._v(
+                    "Page " +
+                      _vm._s(_vm.pagination.current) +
+                      " of " +
+                      _vm._s(_vm.pagination.last)
+                  )
+                ])
               ]),
               _vm._v(" "),
               _c(
@@ -38247,9 +38244,10 @@ var render = function() {
                     "a",
                     {
                       staticClass: "page-link",
-                      attrs: { href: "#", title: "Next page" },
+                      attrs: { href: "", title: "Next page" },
                       on: {
                         click: function($event) {
+                          $event.preventDefault()
                           return _vm.fetchVideos(_vm.pagination.next)
                         }
                       }

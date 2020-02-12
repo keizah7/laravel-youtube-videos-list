@@ -57,7 +57,6 @@
                         <a class="btn btn-primary" href="{{ route('youtube.login') }}">Log to google</a>
                     @endif
 
-{{--                    {{ dd($pages) }}--}}
                     @include('layouts.pagination', [
                         'channel' => $currentChannel,
                         'pages' => $pages,

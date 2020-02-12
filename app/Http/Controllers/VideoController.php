@@ -6,6 +6,7 @@ use App\Services\Youtube;
 use App\Video;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\Video as VideoResource;
 
 class VideoController extends Controller
 {
@@ -14,19 +15,25 @@ class VideoController extends Controller
      */
     public function __construct()
     {
-        $this->authorizeResource(Video::class, 'video');
+//        $this->authorizeResource(Video::class, 'video');
     }
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\View\View
      */
     public function index()
     {
-        return view('video.index', [
-            'videos' => Video::orderByDesc('id')->paginate(10),
-        ]);
+        $videos = Video::with(['user' => function ($q) {
+            $q->select(['id','name']);
+        }])->orderByDesc('id')->paginate(5);
+
+        if(\request()->expectsJson()){
+            return VideoResource::collection($videos);
+        }
+
+        return view('video.index', compact('videos'));
     }
 
     /**
@@ -106,11 +113,17 @@ class VideoController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Video $video
-     * @return \Illuminate\Http\RedirectResponse
+     * @return VideoResource
      * @throws \Exception
      */
     public function destroy(Video $video)
     {
+        if(\request()->expectsJson()){
+            $video->delete();
+
+            return new VideoResource($video);
+        }
+
         $video->delete();
 
         return redirect()->back()->with('message', 'Video deleted successfully');

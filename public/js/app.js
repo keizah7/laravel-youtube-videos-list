@@ -1932,6 +1932,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1980,6 +1982,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     showPagination: function showPagination() {
       return this.pagination.total > this.pagination.inPage;
+    },
+    isNotEmpty: function isNotEmpty() {
+      return this.videos.length > 0;
     }
   }
 });
@@ -38331,6 +38336,10 @@ var render = function() {
           1
         )
       }),
+      _vm._v(" "),
+      !_vm.isNotEmpty
+        ? _c("div", [_vm._v("\n        Video list is empty\n    ")])
+        : _vm._e(),
       _vm._v(" "),
       _vm.showPagination
         ? _c("nav", { staticClass: "pages-border" }, [

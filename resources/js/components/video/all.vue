@@ -3,7 +3,9 @@
         <div class="media" v-for="(video, index) in videos" :key="video.id">
             <video-file :model="video"></video-file>
         </div>
-
+        <div v-if="!isNotEmpty">
+            Video list is empty
+        </div>
         <nav class="pages-border" v-if="showPagination">
             <ul class="pagination">
                 <li class="page-item" :class="[{disabled: !pagination.prev}]">
@@ -69,6 +71,9 @@
             },
             showPagination() {
                 return this.pagination.total > this.pagination.inPage;
+            },
+            isNotEmpty() {
+                return this.videos.length > 0;
             }
         }
     }

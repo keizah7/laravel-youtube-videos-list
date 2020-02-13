@@ -18,7 +18,7 @@
 1. Atvaizduoti video sąrašą:
     1. Vartotojas `agent` turi matyti visų ištrauktų klipų lentelę (pagalvoti apie duomenų kešavimą).
 
-### Instaliation
+### Installation
 Clone repository to folder in your machine.
 
 Run commands in shell:
@@ -26,12 +26,12 @@ Run commands in shell:
 git clone https://github.com/keizah7/laravel-youtube-videos-list.git your-folder
 cd your-folder
 composer install
-npm install && npm run dev
+npm install
 ```
 Create .env file.
 Run ``php artisan key:generate`` and the fill data in .env file:
 ```
-MIX_SENTRY_DSN_PUBLIC=http://your.url/public
+MIX_SENTRY_DSN_PUBLIC=http://localhost/your-folder/public
 DB_DATABASE=database-name
 DB_USERNAME=database-user
 DB_PASSWORD=database-pass
@@ -40,4 +40,6 @@ YOUTUBE_API_KEY=youtube-api-key
 OAUTH2_CLIENT_ID=google-oauth2-client-id
 OAUTH2_CLIENT_SECRET=google-oauth2-client-seret
 ```
+And, finally: run ```npm run dev```
+
 #### Author: [Artūras](https://github.com/keizah7) ![Followers](https://img.shields.io/github/followers/keizah7?style=social)

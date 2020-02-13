@@ -15,12 +15,11 @@ class VideoController extends Controller
      */
     public function __construct()
     {
-//        $this->authorizeResource(Video::class, 'video');
+        $this->authorizeResource(Video::class, 'video');
     }
 
     /**
      * Display a listing of the resource.
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\View\View
      */
     public function index()
@@ -113,7 +112,7 @@ class VideoController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Video $video
-     * @return VideoResource
+     * @return VideoResource|\Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
     public function destroy(Video $video)

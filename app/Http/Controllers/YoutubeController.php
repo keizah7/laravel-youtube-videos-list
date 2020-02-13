@@ -31,6 +31,8 @@ class YoutubeController extends Controller
             return response()->json([
                 'videos' => $data['videos'],
                 'channels' => $data['channels'],
+                'pages' => $data['pages'],
+                'currentChannel' => $currentChannel,
             ]);
         }
 

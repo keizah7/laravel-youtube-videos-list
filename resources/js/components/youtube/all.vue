@@ -7,6 +7,17 @@
             <hr>
             Playlist is empty
         </div>
+        <nav class="pages-border" v-if="showPagination">
+            <ul class="pagination">
+                <li class="page-item" :class="[{disabled: !pagination.prev}]">
+                    <a class="page-link" href="" title="Previous page" @click.prevent="fetchVideos(currentChannel, pagination.prev)">&lsaquo;</a>
+                </li>
+
+                <li class="page-item" v-bind:class="[{disabled: !pagination.next}]">
+                    <a class="page-link" href="" title="Next page" @click.prevent="fetchVideos(currentChannel, pagination.next)">&rsaquo;</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </template>
 
@@ -19,7 +30,8 @@
                 videos: [],
                 video: {},
                 video_id: '',
-                pagination: {}
+                pagination: {},
+                currentChannel: '',
             }
         },
 
@@ -31,14 +43,13 @@
         },
 
         methods: {
-            fetchVideos (target) {
+            fetchVideos (target, page) {
                 let url = new URL('http://ytapi.com/youtube');
                 let params = {
-                    channel: (target || '')
+                    channel: (target || ''),
+                    page: (page || ''),
                 };
                 Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
-                console.log(url);
 
                 fetch(url, {
                     headers: {
@@ -48,13 +59,26 @@
                     .then(res => res.json())
                     .then(res => {
                         this.videos = res.videos.items;
+                        this.makePagination(res.pages);
+                        this.currentChannel = res.currentChannel;
                     }).catch(err => console.error(err));
+            },
+            makePagination(page) {
+                this.pagination = {
+                    next: page.next,
+                    prev: page.prev,
+                    total: page.total,
+                    inPage: page.inPage,
+                }
             }
         },
 
         computed: {
             isNotEmpty() {
                 return this.videos.length > 0;
+            },
+            showPagination() {
+                return this.pagination.total > this.pagination.inPage;
             }
         }
     }

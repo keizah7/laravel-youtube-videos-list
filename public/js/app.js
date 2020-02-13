@@ -1948,7 +1948,6 @@ __webpack_require__.r(__webpack_exports__);
     fetchVideos: function fetchVideos(page_url) {
       var _this = this;
 
-      var vm = this;
       page_url = page_url || '/videos';
       fetch(page_url, {
         headers: {
@@ -1957,7 +1956,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         return res.json();
       }).then(function (res) {
-        vm.makePagination(res.meta, res.links);
+        _this.makePagination(res.meta, res.links);
+
         _this.videos = res.data;
       })["catch"](function (err) {
         return console.error(err);
@@ -2103,6 +2103,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2110,7 +2121,8 @@ __webpack_require__.r(__webpack_exports__);
       videos: [],
       video: {},
       video_id: '',
-      pagination: {}
+      pagination: {},
+      currentChannel: ''
     };
   },
   created: function created() {
@@ -2122,17 +2134,17 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    fetchVideos: function fetchVideos(target) {
+    fetchVideos: function fetchVideos(target, page) {
       var _this2 = this;
 
       var url = new URL('http://ytapi.com/youtube');
       var params = {
-        channel: target || ''
+        channel: target || '',
+        page: page || ''
       };
       Object.keys(params).forEach(function (key) {
         return url.searchParams.append(key, params[key]);
       });
-      console.log(url);
       fetch(url, {
         headers: {
           'Accept': 'application/json'
@@ -2141,14 +2153,29 @@ __webpack_require__.r(__webpack_exports__);
         return res.json();
       }).then(function (res) {
         _this2.videos = res.videos.items;
+
+        _this2.makePagination(res.pages);
+
+        _this2.currentChannel = res.currentChannel;
       })["catch"](function (err) {
         return console.error(err);
       });
+    },
+    makePagination: function makePagination(page) {
+      this.pagination = {
+        next: page.next,
+        prev: page.prev,
+        total: page.total,
+        inPage: page.inPage
+      };
     }
   },
   computed: {
     isNotEmpty: function isNotEmpty() {
       return this.videos.length > 0;
+    },
+    showPagination: function showPagination() {
+      return this.pagination.total > this.pagination.inPage;
     }
   }
 });
@@ -38498,6 +38525,66 @@ var render = function() {
         ? _c("div", { staticClass: "mt-3" }, [
             _c("hr"),
             _vm._v("\n        Playlist is empty\n    ")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.showPagination
+        ? _c("nav", { staticClass: "pages-border" }, [
+            _c("ul", { staticClass: "pagination" }, [
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class: [{ disabled: !_vm.pagination.prev }]
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "", title: "Previous page" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.fetchVideos(
+                            _vm.currentChannel,
+                            _vm.pagination.prev
+                          )
+                        }
+                      }
+                    },
+                    [_vm._v("‹")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class: [{ disabled: !_vm.pagination.next }]
+                },
+                [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "", title: "Next page" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.fetchVideos(
+                            _vm.currentChannel,
+                            _vm.pagination.next
+                          )
+                        }
+                      }
+                    },
+                    [_vm._v("›")]
+                  )
+                ]
+              )
+            ])
           ])
         : _vm._e()
     ],

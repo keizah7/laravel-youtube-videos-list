@@ -39,7 +39,6 @@
 
         methods: {
             fetchVideos (page_url) {
-                let vm = this;
                 page_url = page_url || '/videos'
                 fetch(page_url, {
                     headers: {
@@ -48,7 +47,7 @@
                 })
                     .then(res=>res.json())
                     .then(res => {
-                        vm.makePagination(res.meta, res.links);
+                        this.makePagination(res.meta, res.links);
                         this.videos = res.data;
                     }).catch(err => console.error(err));
             },

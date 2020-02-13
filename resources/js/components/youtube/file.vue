@@ -32,7 +32,7 @@
                 var formdata = new FormData();
                 formdata.append('id', id);
 
-                fetch('http://ytapi.com/videos', {
+                fetch(window.app.url+'/videos', {
                     method: 'POST',
                     body: formdata,
                     headers: {

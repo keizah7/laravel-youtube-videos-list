@@ -33,7 +33,7 @@
         },
         methods: {
             fetchChannels () {
-                fetch('youtube', {
+                fetch(window.app.url+'/youtube', {
                     headers: {
                         'Accept': 'application/json',
                     }

@@ -1948,7 +1948,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchVideos: function fetchVideos(page_url) {
       var _this = this;
 
-      page_url = page_url || '/videos';
+      page_url = page_url || window.app.url + '/videos';
       fetch(page_url, {
         headers: {
           'Accept': 'application/json'
@@ -2027,7 +2027,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (confirm('Are you sure?')) {
-        fetch("/videos/".concat(id), {
+        fetch(window.app.url + "/videos/".concat(id), {
           body: JSON.stringify({
             '_token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
           }),
@@ -2137,7 +2137,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchVideos: function fetchVideos(target, page) {
       var _this2 = this;
 
-      var url = new URL('http://ytapi.com/youtube');
+      var url = new URL(window.app.url + '/youtube');
       var params = {
         channel: target || '',
         page: page || ''
@@ -2226,7 +2226,7 @@ __webpack_require__.r(__webpack_exports__);
     fetchChannels: function fetchChannels() {
       var _this = this;
 
-      fetch('youtube', {
+      fetch(window.app.url + '/youtube', {
         headers: {
           'Accept': 'application/json'
         }
@@ -2285,7 +2285,7 @@ __webpack_require__.r(__webpack_exports__);
     saveVideo: function saveVideo(id) {
       var formdata = new FormData();
       formdata.append('id', id);
-      fetch('http://ytapi.com/videos', {
+      fetch(window.app.url + '/videos', {
         method: 'POST',
         body: formdata,
         headers: {
@@ -50966,6 +50966,9 @@ Vue.component('youtube-channels', __webpack_require__(/*! ./components/youtube/c
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+window.app = {
+  url: "http://ytapi.com"
+};
 var app = new Vue({
   el: '#app'
 });

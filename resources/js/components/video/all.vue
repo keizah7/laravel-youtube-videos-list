@@ -39,7 +39,7 @@
 
         methods: {
             fetchVideos (page_url) {
-                page_url = page_url || '/videos'
+                page_url = page_url || (window.app.url+'/videos');
                 fetch(page_url, {
                     headers: {
                         'Accept': 'application/json',

@@ -30,7 +30,7 @@
         methods: {
             deleteVideo(id) {
                 if(confirm('Are you sure?')) {
-                    fetch(`/videos/${id}`, {
+                    fetch(window.app.url+`/videos/${id}`, {
                         body: JSON.stringify({
                             '_token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                         }),

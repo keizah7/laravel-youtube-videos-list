@@ -44,7 +44,7 @@
 
         methods: {
             fetchVideos (target, page) {
-                let url = new URL('http://ytapi.com/youtube');
+                let url = new URL(window.app.url+'/youtube');
                 let params = {
                     channel: (target || ''),
                     page: (page || ''),

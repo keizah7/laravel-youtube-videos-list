@@ -33,6 +33,10 @@ Vue.component('youtube-channels', require('./components/youtube/channels.vue').d
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+window.app = {
+    url: process.env.MIX_SENTRY_DSN_PUBLIC
+};
+
 const app = new Vue({
     el: '#app',
 });

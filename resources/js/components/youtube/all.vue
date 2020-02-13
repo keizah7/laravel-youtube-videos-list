@@ -58,18 +58,19 @@
                 })
                     .then(res => res.json())
                     .then(res => {
-                        this.videos = res.videos.items;
+                        this.videos = (res.videos) ? res.videos.items : [];
+
                         this.makePagination(res.pages);
                         this.currentChannel = res.currentChannel;
                     }).catch(err => console.error(err));
             },
             makePagination(page) {
-                this.pagination = {
+                this.pagination = page ? {
                     next: page.next,
                     prev: page.prev,
                     total: page.total,
                     inPage: page.inPage,
-                }
+                } : {};
             }
         },
 

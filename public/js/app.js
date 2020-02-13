@@ -2152,7 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         return res.json();
       }).then(function (res) {
-        _this2.videos = res.videos.items;
+        _this2.videos = res.videos ? res.videos.items : [];
 
         _this2.makePagination(res.pages);
 
@@ -2162,12 +2162,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     makePagination: function makePagination(page) {
-      this.pagination = {
+      this.pagination = page ? {
         next: page.next,
         prev: page.prev,
         total: page.total,
         inPage: page.inPage
-      };
+      } : {};
     }
   },
   computed: {

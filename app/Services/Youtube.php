@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 class Youtube
 {
     private $oauthClientId, $oauthClientSecret, $youtubeApiKey, $client, $pagesInfo;
@@ -22,37 +21,9 @@ class Youtube
         $this->init();
     }
 
-    public function logIn()
-    {
-        if(!$this->client->getAccessToken()) {
-            $state = mt_rand();
-            $this->client->setState($state);
-
-            session(['state' => $state]);
-
-            return redirect($this->client->createAuthUrl());
-        }
-    }
-
-    public function auth($authCode)
-    {
-        $this->client->authenticate($authCode);
-        session([$this->tokenKey => $this->client->getAccessToken()]);
-
-        return redirect()->route('youtube.index');
-    }
-
-    public function isLogged()
-    {
-        $token = session($this->tokenKey);
-
-        if($token) {
-            $this->client->setAccessToken($token);
-        }
-
-        return $this->client->getAccessToken();
-    }
-
+    /**
+     * Initializes class variables
+     */
     private function init(): void
     {
         $this->client = new \Google_Client();
@@ -64,14 +35,61 @@ class Youtube
         $this->channels = collect();
     }
 
-    public function getClient()
+    /**
+     * Redirects user to OAUTH login
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function logIn()
     {
-        return $this->client;
+        if (!$this->client->getAccessToken()) {
+            $state = mt_rand();
+            $this->client->setState($state);
+
+            session(['state' => $state]);
+
+            return redirect($this->client->createAuthUrl());
+        }
     }
 
+    /**
+     * Authenticates user after callback
+     *
+     * @param $authCode
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function auth($authCode)
+    {
+        $this->client->authenticate($authCode);
+        session([$this->tokenKey => $this->client->getAccessToken()]);
+
+        return redirect()->route('youtube.index');
+    }
+
+    /**
+     * Authenticates user
+     *
+     * @return mixed user access token
+     */
+    public function isLogged()
+    {
+        $token = session($this->tokenKey);
+
+        if ($token) {
+            $this->client->setAccessToken($token);
+        }
+
+        return $this->client->getAccessToken();
+    }
+
+    /**
+     * Gets user channels and playlists
+     *
+     * @return \Illuminate\Support\Collection|null
+     */
     public function getChannels()
     {
-        if($this->isLogged()) {
+        if ($this->isLogged()) {
             try {
                 $yt = new \Google_Service_YouTube($this->getClient());
 
@@ -82,21 +100,23 @@ class Youtube
                     return $value;
                 });
 
-                $playlists = $yt->playlists->listPlaylists('snippet', ['mine' => true])->items;
-                $playlists = collect($playlists)->mapWithKeys(function ($item) {
-                    return [$item->snippet->title => $item->id];
-                });
-
-                return $this->channels = $playlists->merge($channels);
+                return $this->channels = $this->getPlaylists($yt)->merge($channels);
             } catch (\Google_Service_Exception | \Google_Exception $e) {
                 return null;
             }
         }
     }
 
+    /**
+     * Gets user videos by channel and current page
+     *
+     * @param $channelId
+     * @param $page
+     * @return \Google_Service_YouTube_PlaylistItemListResponse|\Illuminate\Support\Collection|null
+     */
     public function getVideos($channelId, $page)
     {
-        if($this->isLogged()) {
+        if ($this->isLogged()) {
             try {
                 $yt = new \Google_Service_YouTube($this->getClient());
 
@@ -122,14 +142,20 @@ class Youtube
         return collect();
     }
 
+    /**
+     * Gets user video by id
+     *
+     * @param $id
+     * @return \Illuminate\Support\Collection|mixed
+     */
     public function getVideo($id)
     {
-        if($this->isLogged()) {
+        if ($this->isLogged()) {
             try {
                 $yt = new \Google_Service_YouTube($this->getClient());
 
                 return collect($yt->videos->listVideos('snippet', [
-                    'id' => $id,
+                    'id' => $id
                 ])->items)->first();
             } catch (\Google_Service_Exception | \Google_Exception $e) {
                 return collect();
@@ -140,10 +166,32 @@ class Youtube
     }
 
     /**
+     * Gets user playlists
+     *
+     * @param \Google_Service_YouTube $yt
+     * @return \Illuminate\Support\Collection|mixed
+     */
+    private function getPlaylists(\Google_Service_YouTube $yt)
+    {
+        $playlists = $yt->playlists->listPlaylists('snippet', ['mine' => true])->items;
+
+        return collect($playlists)->mapWithKeys(function ($item) {
+            return [$item->snippet->title => $item->id];
+        });
+    }
+
+    /**
+     * Gets videos pagination info
+     *
      * @return mixed
      */
     public function getPagesInfo()
     {
         return $this->pagesInfo ?? null;
+    }
+
+    public function getClient()
+    {
+        return $this->client;
     }
 }

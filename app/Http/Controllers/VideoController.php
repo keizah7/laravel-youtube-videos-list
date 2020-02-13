@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use \Facades\App\Cache\Videos;
-use App\Services\Youtube;
+
 use App\Video;
+use App\Services\Youtube;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use \Facades\App\Cache\Videos;
 use App\Http\Resources\Video as VideoResource;
 
 class VideoController extends Controller
@@ -61,14 +61,8 @@ class VideoController extends Controller
             'photo' => $video->snippet->thumbnails->default->url,
         ];
 
-        $validator = Validator::make($data, [
-            'url' => 'required|unique:videos,url',
-            'title' => 'required|max:255',
-            'description' => 'required',
-            'photo' => 'required|max:255',
-        ], ['url.unique' => 'Video is already saved']);
-
         if(\request()->expectsJson()){
+            $validator = Video::validateVideoData($data);
             if($validator->fails()) {
                 return [
                     'message' => $validator->errors()->all()
@@ -76,7 +70,6 @@ class VideoController extends Controller
             }
 
             auth()->user()->videos()->create($data);
-
             return response()->json([
                 'message' => 'Video saved successfully',
                 'data' => $data,

@@ -17,10 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::resource('videos', 'VideoController');
+    Route::resource('videos', 'VideoController')->only([
+        'index',
+        'store',
+        'destroy'
+    ]);
 
     Route::group(['middleware' => 'isLeader'], function () {
         Route::get('youtube', 'YoutubeController@index')->name('youtube.index');

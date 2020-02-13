@@ -16,9 +16,11 @@ class Videos
         $cacheKey = $this->getCacheKey($key);
 
         return cache()->remember($cacheKey, Carbon::now()->addMinutes(30), function () use ($orderBy, $inPage) {
-            return Video::with(['user' => function ($q) {
-                $q->select(['id', 'name']);
-            }])->orderByDesc($orderBy)->paginate($inPage);
+            return Video::with([
+                'user' => function ($q) {
+                    $q->select(['id', 'name']);
+                }
+            ])->orderByDesc($orderBy)->paginate($inPage);
         });
     }
 

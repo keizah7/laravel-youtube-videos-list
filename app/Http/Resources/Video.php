@@ -9,14 +9,14 @@ class Video extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
     {
         return [
             'id' => $this->id,
-            'url' => 'https://www.youtube.com/watch?v='.$this->url,
+            'url' => 'https://www.youtube.com/watch?v=' . $this->url,
             'title' => $this->title,
             'description' => $this->description,
             'short_description' => $this->short_description,
@@ -24,6 +24,5 @@ class Video extends JsonResource
             'user' => $this->user,
             'created_at' => $this->created_at,
         ];
-//        return parent::toArray($request);
     }
 }

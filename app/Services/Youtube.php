@@ -102,7 +102,7 @@ class Youtube
 
                 $videos = $yt->playlistItems->listPlaylistItems('snippet', [
                     'playlistId' => $channelId ?? $this->channels->first(),
-                    'maxResults' => 5,
+                    'maxResults' => 10,
                     'pageToken' => $page,
                 ]);
 

@@ -2043,6 +2043,8 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (res) {
           return res.json();
         }).then(function (res) {
+          alert('Video  deleted and will dissapear after cache expire');
+
           _this.$parent.fetchVideos();
         })["catch"](function (err) {
           return console.error(err);

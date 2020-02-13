@@ -41,6 +41,7 @@
                     })
                     .then(res => res.json())
                     .then(res => {
+                        alert('Video  deleted and will dissapear after cache expire');
                         this.$parent.fetchVideos();
                     })
                     .catch(err => console.error(err));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use \Facades\App\Cache\Videos;
 use App\Services\Youtube;
 use App\Video;
 use Illuminate\Http\Request;
@@ -24,9 +25,7 @@ class VideoController extends Controller
      */
     public function index()
     {
-        $videos = Video::with(['user' => function ($q) {
-            $q->select(['id','name']);
-        }])->orderByDesc('id')->paginate(5);
+        $videos = Videos::all('id', 10);
 
         if(\request()->expectsJson()){
             return VideoResource::collection($videos);

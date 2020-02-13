@@ -2281,6 +2281,23 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     "short": function short(value) {
       return value.substring(0, 180) + "...";
+    },
+    saveVideo: function saveVideo(id) {
+      var formdata = new FormData();
+      formdata.append('id', id);
+      fetch('http://ytapi.com/videos', {
+        method: 'POST',
+        body: formdata,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        alert(res.message);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
     }
   }
 });
@@ -38730,19 +38747,24 @@ var render = function() {
       _c("p", [_vm._v(_vm._s(_vm.short(_vm.video.snippet.description)))])
     ]),
     _vm._v(" "),
-    _vm._m(0)
+    _c("div", [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-outline-success",
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.saveVideo(_vm.video.snippet.resourceId.videoId)
+            }
+          }
+        },
+        [_vm._v("Save")]
+      )
+    ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("button", { staticClass: "btn btn-outline-success" }, [_vm._v("Save")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

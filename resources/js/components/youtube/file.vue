@@ -8,7 +8,7 @@
                 <p>{{ short(video.snippet.description) }}</p>
             </div>
             <div>
-                <button class="btn btn-outline-success">Save</button>
+                <button class="btn btn-outline-success" @click.prevent="saveVideo(video.snippet.resourceId.videoId)">Save</button>
             </div>
         </div>
     </div>
@@ -26,7 +26,25 @@
         methods: {
             short(value) {
                 return value.substring(0, 180)+"...";
-            }
+            },
+
+            saveVideo(id) {
+                var formdata = new FormData();
+                formdata.append('id', id);
+
+                fetch('http://ytapi.com/videos', {
+                    method: 'POST',
+                    body: formdata,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        alert(res.message);
+                    })
+                    .catch(err => console.error(err));
+            },
         }
     }
 </script>

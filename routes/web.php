@@ -17,16 +17,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function() {
+//Route::group(['middleware' => 'auth'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::resource('videos', 'VideoController');
 
-    Route::group(['middleware' => 'isLeader'], function () {
+//    Route::group(['middleware' => 'isLeader'], function () {
         Route::get('youtube', 'YoutubeController@index')->name('youtube.index');
         Route::get('youtube/login', 'YoutubeController@login')->name('youtube.login');
         Route::get('youtube/callback', 'YoutubeController@callback')->name('youtube.callback');
-    });
-});
+//    });
+//});
 
 

@@ -50,7 +50,7 @@ class VideoController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Youtube $youtube
-     * @return \Illuminate\Http\RedirectResponse
+     * @return array|\Illuminate\Http\JsonResponse
      */
     public function store(Request $request, Youtube $youtube)
     {
@@ -62,16 +62,27 @@ class VideoController extends Controller
             'photo' => $video->snippet->thumbnails->default->url,
         ];
 
-        Validator::make($data, [
+        $validator = Validator::make($data, [
             'url' => 'required|unique:videos,url',
             'title' => 'required|max:255',
             'description' => 'required',
             'photo' => 'required|max:255',
-        ])->validate();
+        ], ['url.unique' => 'Video is already saved']);
 
-        auth()->user()->videos()->create($data);
+        if(\request()->expectsJson()){
+            if($validator->fails()) {
+                return [
+                    'message' => $validator->errors()->all()
+                ];
+            }
 
-        return redirect()->back()->with('message', 'Video added successfully');
+            auth()->user()->videos()->create($data);
+
+            return response()->json([
+                'message' => 'Video saved successfully',
+                'data' => $data,
+            ]);
+        }
     }
 
     /**
@@ -117,14 +128,8 @@ class VideoController extends Controller
      */
     public function destroy(Video $video)
     {
-        if(\request()->expectsJson()){
-            $video->delete();
-
-            return new VideoResource($video);
-        }
-
         $video->delete();
 
-        return redirect()->back()->with('message', 'Video deleted successfully');
+        return new VideoResource($video);
     }
 }

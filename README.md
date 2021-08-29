@@ -1,10 +1,10 @@
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
-[![Chat](https://img.shields.io/discord/620935790867906561?label=chat)](https://discordapp.com/channels/620935790867906561)
-![HitCount](http://hits.dwyl.io/front-end-by-rimantas/10-grupe-portfolio-personal.svg)
-![Forks](https://img.shields.io/github/forks/front-end-by-rimantas/10-grupe-portfolio-personal?style=social)
-![Stars](https://img.shields.io/github/stars/front-end-by-rimantas/10-grupe-portfolio-personal?style=social)
-![Watchers](https://img.shields.io/github/watchers/front-end-by-rimantas/10-grupe-portfolio-personal?style=social)
-![Contributors](https://img.shields.io/github/contributors/front-end-by-rimantas/10-grupe-portfolio-personal)
+[![Chat](https://img.shields.io/discord/620935790867906561?label=chat)](https://discord.gg/YeJBQrTUT9)
+![HitCount](https://views.whatilearened.today/views/github/keizah7/laravel-youtube-videos-list.svg)
+![Forks](https://img.shields.io/github/forks/keizah7/laravel-youtube-videos-list?style=social)
+![Stars](https://img.shields.io/github/stars/keizah7/laravel-youtube-videos-list?style=social)
+![Watchers](https://img.shields.io/github/watchers/keizah7/laravel-youtube-videos-list?style=social)
+![Contributors](https://img.shields.io/github/contributors/keizah7/laravel-youtube-videos-list)
 ## Youtube videos list
 
 #### Panaudojant Laravel 5+ ir VueJS įgyvendinti šiuos punktus:
